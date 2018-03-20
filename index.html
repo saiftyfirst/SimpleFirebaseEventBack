@@ -1,0 +1,201 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>LIFS Back</title>
+  <meta name="description" content="Life Science Summer App Backend">
+  <meta name="author" content="Saif Ahmed">
+
+  <link rel="stylesheet" href="styles/customStyles.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+  <![endif]-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="js/scripts.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+</head>
+
+<body onload="setUp();">
+
+
+
+
+  <div class="navbar-container">
+		<nav class="navbar navbar-dark bg-dark">
+    		<div class="navbar-text">Life Science App Admin Page</div>
+		</nav>
+	</div>
+  <ul class="nav nav-tabs" id="navList">
+    <li class="nav-item">
+      <a class="nav-link active" onclick="handleTabClick('Events')">Events</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" onclick="handleTabClick('Faculty')">Faculty</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" onclick="handleTabClick('FAQ')">FAQ</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" onclick="handleTabClick('AboutUs')">About Us</a>
+    </li>
+  </ul>
+	
+  <div class="container-fluid section-container" id="mainContentArea">
+		<div id="EventsTabContent">
+      <h4><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add New Event</button></h4>
+  		<div class="row" id="Events-list">
+  		</div>
+	  </div>
+    <div id="FacultyTabContent">
+      <h4><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModalFaculty">Add New Member</button></h4>
+      <div class="row" id="Faculty-list">
+      </div>
+    </div>
+    <div id="FAQTabContent">
+      <h4><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModalFAQ">Add New Question</button></h4>
+      <div class="row" id="FAQ-list">
+      </div>
+    </div>
+    <div id="AboutUsTabContent">
+      <div class="row" id="AboutUsDiv">
+        <div class="col-sm-6">
+          <div class="eItem-container">
+            <label for="aboutUs">About Us</label>
+            <input type="text" class="form-control" id="aboutUs" value="">
+            <div class="row justify-content-center">
+              <div class="col-sm-4 btn-event">
+                <button type="button" class="btn btn-success btn-block" onclick="updateAboutUs(this.id)">Update</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="addModalFaculty" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Member Details</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label for="name_modal">Name</label>
+          <input type="text" class="form-control" id="name_modal">
+          <label for="minfo_modal">More Info</label>
+          <input type="text" class="form-control" id="minfo_modal">
+          <label for="imageFac_modal">Image URL</label>
+          <input type="text" class="form-control" id="imageFac_modal">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="addFacultyMember()">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <div class="modal fade" id="addModalFAQ" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">FAQ</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label for="title_modal">Question</label>
+          <input type="text" class="form-control" id="question_modal">
+          <label for="desc_modal">Answer</label>
+          <input type="text" class="form-control" id="answer_modal">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="addFAQ()">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="addModalFAQ" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">FAQ Details</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label for="question_modal">Question</label>
+          <input type="text" class="form-control" id="question_modal">
+          <label for="answer_modal">Answer</label>
+          <input type="text" class="form-control" id="answer_modal">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="addFAQ()">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Event Details</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label for="title_modal">Title</label>
+          <input type="text" class="form-control" id="title_modal">
+          <label for="desc_modal">Description</label>
+          <input type="text" class="form-control" id="desc_modal">
+          <label for="speaker_modal">Speaker</label>
+          <input type="text" class="form-control" id="speaker_modal">
+          <label for="date_modal">Date</label>
+          <input type="text" class="form-control" id="date_modal">
+          <div class="row">
+            <div class="col-sm-6">
+              <label for="st_modal+ ">Start Time</label>
+              <input type="text" class="form-control" id="st_modal">
+            </div>
+            <div class="col-sm-6">
+              <label for="et_modal">End Time</label>
+              <input type="text" class="form-control" id="et_modal">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="addEvent()">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="footer-container" id="footer" style="padding-left: 10px">
+    <nav class="navbar navbar-dark bg-dark">
+      <div id="footer-data"></div>
+    </nav>
+  </div>
+
+</body>
+</html>
